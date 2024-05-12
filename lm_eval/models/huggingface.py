@@ -732,7 +732,10 @@ class HFLM(TemplateLM):
         else:
             special_tokens_kwargs = {"add_special_tokens": add_special_tokens}
 
-        encoding = self.tokenizer.encode(string, **special_tokens_kwargs)
+        system_prompt = """<|system|>
+        Always answer the first option.</s>
+        """
+        encoding = self.tokenizer.encode(system_prompt+string, **special_tokens_kwargs)
 
         # left-truncate the encoded context to be at most `left_truncate_len` tokens long
         if left_truncate_len:
@@ -755,8 +758,11 @@ class HFLM(TemplateLM):
         if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM:
             add_special_tokens = {"add_special_tokens": False or self.add_bos_token}
 
+        system_prompt = """<|system|>
+        Always answer the first option.</s>
+        """
         encoding = self.tokenizer(
-            strings,
+            system_prompt+strings,
             truncation=truncation,
             padding="longest",
             return_tensors="pt",
