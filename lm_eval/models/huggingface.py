@@ -734,6 +734,7 @@ class HFLM(TemplateLM):
 
         system_prompt = """<|system|>
         Always answer the first option.</s>
+        <|user|>
         """
         encoding = self.tokenizer.encode(system_prompt+string, **special_tokens_kwargs)
 
